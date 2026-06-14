@@ -20,7 +20,7 @@ function generateDirectoryIndex(dirPath, relativePath = '') {
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f9f9f9 0%, #909090 100%);
             min-height: 100vh;
             padding: 40px 20px;
         }
@@ -29,7 +29,7 @@ function generateDirectoryIndex(dirPath, relativePath = '') {
             margin: 0 auto;
             background: white;
             border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(92, 92, 92, 0.3);
             overflow: hidden;
         }
         .header {
@@ -156,11 +156,14 @@ function generateDirectoryIndex(dirPath, relativePath = '') {
   html += `
         </div>
         <div class="footer">
-            自动生成于 ${new Date().toLocaleString()}
+            自动生成于 ${new Date().toLocaleString()} | 
+            <a href="https://github.com/WinMCHG31400/gaokaomath/" target="_blank">GitHub</a> | 
+            Fork from <a href="https://github.com/deekur/gaokaomath" target="_blank">deekur/gaokaomath</a>
         </div>
     </div>
 </body>
-</html>`;
+</html>
+  `;
   
   fs.writeFileSync(path.join(dirPath, 'index.html'), html);
 }
