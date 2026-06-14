@@ -1,0 +1,6 @@
+{
+  "name": "my-pages-site",
+  "scripts": {
+    "build": "node scripts/generate-indexes.js"
+  }
+}
