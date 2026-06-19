@@ -1,17 +1,26 @@
 const fs = require('fs');
 const path = require('path');
+let isIgnored = () => false; // 默认不忽略任何文件
 const CONFIG = {
-    IGNORED_FILES_FILE: 'generate.ignore', // 忽略文件列表的文件路径
+  IGNORED_FILES: `
+    README.md
+    src/*
+    .gitattributes
+    .gitignore
+    package.json
+    package-lock.json
+    .git/*
+    `, // 忽略文件列表的文件路径
 };
 
-export function simpleGitignore(patterns) {
+function simpleGitignore(patterns) {
   const ignoreList = [];
   const unignoreList = [];
 
   patterns.split('\n').forEach(line => {
     line = line.trim();
     if (!line || line.startsWith('#')) return;
-    
+
     if (line.startsWith('!')) {
       unignoreList.push(line.substring(1));
     } else {
@@ -19,7 +28,7 @@ export function simpleGitignore(patterns) {
     }
   });
 
-  return function(filePath) {
+  return function (filePath) {
     // 简单匹配（处理常见场景）
     for (const unignore of unignoreList) {
       if (filePath.includes(unignore)) return false;
@@ -54,38 +63,15 @@ export function simpleGitignore(patterns) {
     return false;
   };
 }
-async function fetchIgnoredFiles() {
-    try {
-        const url = CONFIG.IGNORED_FILES_FILE
-            ? `${CONFIG.IGNORED_FILES_FILE}?t=${Date.now()}`
-            : CONFIG.IGNORED_FILES_FILE;
-
-        const response = await fetch(url);
-
-        const text = await response.text();
-        const isIgnored = simpleGitignore(text);
-        return isIgnored;
-
-        if (!response.ok) {
-            throw new Error(`获取忽略文件列表失败 (HTTP ${response.status})`);
-        }
-
-        
-    } catch (error) {
-        console.error('加载忽略文件列表失败:', error);
-        showError('加载忽略文件列表失败: ' + error.message);
-        return [];
-    }
-}
 function generateDirectoryIndex(dirPath, relativePath = '') {
   const items = fs.readdirSync(dirPath);
-  
   // 检查是否已有 index.html
   if (items.includes('index.html') && dirPath !== '.') {
     return;
   }
-  
+
   const displayPath = relativePath || '/';
+  const isRoot = dirPath === '.';
   let html = `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -176,41 +162,42 @@ function generateDirectoryIndex(dirPath, relativePath = '') {
             <h1>${escapeHtml(displayPath)}</h1>
         </div>
         <div class="file-list">
+            ${!isRoot ? `
             <div class="file-item">
-                <div class="icon">📂</div>
-                <div class="name"><a href="../">../</a></div>
-                <div class="size">父目录</div>
-            </div>`;
-
+            <div class="icon">📂</div>
+            <div class="name"><a href="../">../</a></div>
+            <div class="size">父目录</div>
+        </div>` : ''}`;
+              
   // 先列出目录，再列出文件
   const directories = [];
   const files = [];
-  
+
   for (const item of items) {
-    if (item === 'index.html' || item === '.git' || item === '.github') continue;
-    
+    if (item === 'index.html' || item === '.git' || item === '.github' || item === 'src' || isIgnored(item)) continue;
+
     const itemPath = path.join(dirPath, item);
     const isDir = fs.statSync(itemPath).isDirectory();
     const itemDisplay = isDir ? `${item}/` : item;
-    
+
     if (isDir) {
       directories.push({ name: item, display: itemDisplay, isDir: true });
     } else {
       const stats = fs.statSync(itemPath);
-      files.push({ 
-        name: item, 
-        display: itemDisplay, 
+      files.push({
+        name: item,
+        display: itemDisplay,
         isDir: false,
         size: stats.size,
         sizeText: formatFileSize(stats.size)
       });
     }
   }
-  
+
   // 排序：目录在前，文件在后，各自按名称排序
   directories.sort((a, b) => a.name.localeCompare(b.name));
   files.sort((a, b) => a.name.localeCompare(b.name));
-  
+
   for (const dir of directories) {
     html += `
             <div class="file-item">
@@ -219,9 +206,8 @@ function generateDirectoryIndex(dirPath, relativePath = '') {
                 <div class="size">目录</div>
             </div>`;
   }
-  
+
   for (const file of files) {
-    if (isIgnored(file.name)) continue;
     html += `
             <div class="file-item">
                 <div class="icon">📄</div>
@@ -229,19 +215,18 @@ function generateDirectoryIndex(dirPath, relativePath = '') {
                 <div class="size">${file.sizeText}</div>
             </div>`;
   }
-  
+
   html += `
         </div>
         <div class="footer">
-            自动生成于 ${new Date().toLocaleString()} | 
-            <a href="https://github.com/WinMCHG31400/gaokaomath/" target="_blank">GitHub</a> | 
+        <a href="https://github.com/WinMCHG31400/gaokaomath/" target="_blank">GitHub</a> | 
             Fork from <a href="https://github.com/deekur/gaokaomath" target="_blank">deekur/gaokaomath</a>
         </div>
     </div>
 </body>
 </html>
   `;
-  
+
   fs.writeFileSync(path.join(dirPath, 'index.html'), html);
 }
 
@@ -254,7 +239,7 @@ function formatFileSize(bytes) {
 }
 
 function escapeHtml(text) {
-  return text.replace(/[&<>]/g, function(m) {
+  return text.replace(/[&<>]/g, function (m) {
     if (m === '&') return '&amp;';
     if (m === '<') return '&lt;';
     if (m === '>') return '&gt;';
@@ -264,14 +249,14 @@ function escapeHtml(text) {
 
 function walkDirectory(dirPath, basePath = '') {
   const items = fs.readdirSync(dirPath);
-  
+
   // 为当前目录生成索引
   generateDirectoryIndex(dirPath, basePath);
-  
+
   // 递归处理子目录
   for (const item of items) {
     if (item === '.git' || item === '.github') continue;
-    
+
     const itemPath = path.join(dirPath, item);
     if (fs.statSync(itemPath).isDirectory()) {
       const newBasePath = basePath ? `${basePath}/${item}` : item;
@@ -281,6 +266,7 @@ function walkDirectory(dirPath, basePath = '') {
 }
 
 // 从当前目录开始
+isIgnored = new simpleGitignore(CONFIG.IGNORED_FILES);
 console.log(' 开始生成目录索引文件...');
 walkDirectory('.');
 console.log(' 索引文件生成完成！');
