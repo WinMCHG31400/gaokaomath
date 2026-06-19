@@ -1,6 +1,6 @@
 {
-  "name": "my-pages-site",
+  "name": "gaokao-shuxue-site",
   "scripts": {
-    "build": "node scripts/generate-indexes.js"
+    "build": "node src/generate-indexes.js"
   }
 }

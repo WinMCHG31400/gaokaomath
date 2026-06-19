@@ -1,6 +1,32 @@
+import { simpleGitignore } from './generate-ignore.js';
 const fs = require('fs');
 const path = require('path');
+const CONFIG = {
+    IGNORED_FILES_FILE: 'generate.ignore', // 忽略文件列表的文件路径
+};
+async function fetchIgnoredFiles() {
+    try {
+        const url = CONFIG.IGNORED_FILES_FILE
+            ? `${CONFIG.IGNORED_FILES_FILE}?t=${Date.now()}`
+            : CONFIG.IGNORED_FILES_FILE;
 
+        const response = await fetch(url);
+
+        const text = await response.text();
+        const isIgnored = simpleGitignore(text);
+        return isIgnored;
+
+        if (!response.ok) {
+            throw new Error(`获取忽略文件列表失败 (HTTP ${response.status})`);
+        }
+
+        
+    } catch (error) {
+        console.error('加载忽略文件列表失败:', error);
+        showError('加载忽略文件列表失败: ' + error.message);
+        return [];
+    }
+}
 function generateDirectoryIndex(dirPath, relativePath = '') {
   const items = fs.readdirSync(dirPath);
   
@@ -145,6 +171,7 @@ function generateDirectoryIndex(dirPath, relativePath = '') {
   }
   
   for (const file of files) {
+    if (isIgnored(file.name)) continue;
     html += `
             <div class="file-item">
                 <div class="icon">📄</div>
