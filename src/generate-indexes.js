@@ -168,7 +168,7 @@ function generateDirectoryIndex(dirPath, relativePath = '') {
             <div class="name"><a href="../">../</a></div>
             <div class="size">父目录</div>
         </div>` : ''}`;
-              
+
   // 先列出目录，再列出文件
   const directories = [];
   const files = [];
@@ -208,12 +208,22 @@ function generateDirectoryIndex(dirPath, relativePath = '') {
   }
 
   for (const file of files) {
-    html += `
+    if (String(file.name).includes("pdf")||String(file.name).includes("PDF")) {
+      html += `
+            <div class="file-item">
+                <div class="icon">📄</div>
+                <div class="name"><a href=https://res.oplist.org/pdf.js/web/viewer.html?file="${file.display}">${escapeHtml(file.display)}</a></div>
+                <div class="size">${file.sizeText}</div>
+            </div>`;
+    }
+    else {
+      html += `
             <div class="file-item">
                 <div class="icon">📄</div>
                 <div class="name"><a href="${file.display}">${escapeHtml(file.display)}</a></div>
                 <div class="size">${file.sizeText}</div>
             </div>`;
+    }
   }
 
   html += `
