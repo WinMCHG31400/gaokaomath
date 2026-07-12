@@ -212,7 +212,7 @@ function generateDirectoryIndex(dirPath, relativePath = '') {
       html += `
             <div class="file-item">
                 <div class="icon">📄</div>
-                <div class="name"><a href=https://res.oplist.org/pdf.js/web/viewer.html?file="${file.display}">${escapeHtml(file.display)}</a></div>
+                <div class="name"><a href="https://res.oplist.org/pdf.js/web/viewer.html?file=${window.location.href}/${file.display}">${escapeHtml(file.display)}</a></div>
                 <div class="size">${file.sizeText}</div>
             </div>`;
     }
