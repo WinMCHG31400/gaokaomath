@@ -11,6 +11,7 @@ const CONFIG = {
     package-lock.json
     .git/*
     `, // 忽略文件列表的文件路径
+  BASE_URL: 'https://gaokao-math.pages.dev', // 部署域名
 };
 
 function simpleGitignore(patterns) {
@@ -63,6 +64,7 @@ function simpleGitignore(patterns) {
     return false;
   };
 }
+
 function generateDirectoryIndex(dirPath, relativePath = '') {
   const items = fs.readdirSync(dirPath);
   // 检查是否已有 index.html
@@ -72,6 +74,7 @@ function generateDirectoryIndex(dirPath, relativePath = '') {
 
   const displayPath = relativePath || '/';
   const isRoot = dirPath === '.';
+
   let html = `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -208,22 +211,30 @@ function generateDirectoryIndex(dirPath, relativePath = '') {
   }
 
   for (const file of files) {
-    if (String(file.name).includes("pdf")||String(file.name).includes("PDF")) {
-      html += `
+    // 判断是否为PDF文件
+    const isPdf = file.name.toLowerCase().endsWith('.pdf');
+
+    let fileUrl;
+    if (isPdf) {
+      // 构建PDF文件的完整URL
+      const pdfPath = relativePath ? `${relativePath}/${file.name}` : file.name;
+      // 确保路径格式正确（移除多余的斜杠）
+      const cleanPath = pdfPath.replace(/^\/+/, '').replace(/\/+/g, '/');
+      // 构建完整的可访问URL
+      const fullUrl = `${CONFIG.BASE_URL}/${cleanPath}`;
+      // 对完整URL进行编码
+      const encodedPath = encodeURIComponent(fullUrl);
+      fileUrl = `https://res.oplist.org/pdf.js/web/viewer.html?file=${encodedPath}`;
+    } else {
+      fileUrl = file.display;
+    }
+
+    html += `
             <div class="file-item">
-                <div class="icon">📄</div>
-                <div class="name"><a href="https://res.oplist.org/pdf.js/web/viewer.html?file=${window.location.href}/${file.display}">${escapeHtml(file.display)}</a></div>
+                <div class="icon">${isPdf ? '📕' : '📄'}</div>
+                <div class="name"><a href="${fileUrl}" ${isPdf ? 'target="_blank"' : ''}>${escapeHtml(file.display)}</a></div>
                 <div class="size">${file.sizeText}</div>
             </div>`;
-    }
-    else {
-      html += `
-            <div class="file-item">
-                <div class="icon">📄</div>
-                <div class="name"><a href="${file.display}">${escapeHtml(file.display)}</a></div>
-                <div class="size">${file.sizeText}</div>
-            </div>`;
-    }
   }
 
   html += `
