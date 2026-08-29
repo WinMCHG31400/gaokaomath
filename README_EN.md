@@ -67,8 +67,8 @@
   - 1978–1984: National paper
   - 1985–1990: Shanghai paper, Guangdong paper, and national paper
   - 1991–1992: Shanghai paper, national paper, and the Hunan-Hainan-Yunnan paper
-  - 1993: Shanghai paper and papers for the new and old subject groups
-  - 1994–1998: Shanghai paper and national paper
+  - 1993-1994: Shanghai paper and papers for the new and old subject groups
+  - 1995–1998: Shanghai paper and national paper
   - 1999: Guangdong paper, Shanghai paper, and national paper
   - 2000: Guangdong paper, Shanghai paper, and new/old curriculum papers
   - 2001: Guangdong-Henan paper, Shanghai paper, and national new/old curriculum papers
@@ -92,21 +92,16 @@
   - 2024: Tianjin, Beijing, and Shanghai papers; national paper; and New Gaokao Papers I and II
   - 2025–2026: Tianjin, Beijing, and Shanghai papers; National Papers I and II
 
+***Terminology (for consistency, these names may differ from mainstream usage and from *Test Paper Analysis*):***
+- **National paper**: When two curriculum standards coexisted, the earlier set of *unified* Gaokao questions; when only one standard existed, the *unified* Gaokao questions
+- **New Curriculum paper / Syllabus paper**: Unified Gaokao questions based on the 1996 curriculum standards (syllabus)
+  - From 2000 to 2004, it was called the New Curriculum paper in contrast with the Old Curriculum
+  - From 2005 to 2014, it was called the Syllabus paper in contrast with the New Curriculum Standards paper
+- **Old Curriculum paper**: When a New Curriculum paper existed, the other unified Gaokao questions, based on the 1986 curriculum standards
+- **New Curriculum Standards paper**: Unified Gaokao questions based on the 2003 curriculum standards
+- **New Gaokao paper**: Unified Gaokao questions based on the 2017 curriculum standards
 </details>
 
-<details>
-  <summary><b>Terminology</b></summary>
-
-  ***(For consistency, these names may differ from mainstream usage and from *Test Paper Analysis*.)***
-  - **National paper**: When two curriculum standards coexisted, the earlier set of *unified* Gaokao questions; when only one standard existed, the *unified* Gaokao questions
-  - **New Curriculum paper / Syllabus paper**: Unified Gaokao questions based on the 1996 curriculum standards (syllabus)
-    - From 2000 to 2004, it was called the New Curriculum paper in contrast with the Old Curriculum
-    - From 2005 to 2014, it was called the Syllabus paper in contrast with the New Curriculum Standards paper
-  - **Old Curriculum paper**: When a New Curriculum paper existed, the other unified Gaokao questions, based on the 1986 curriculum standards
-  - **New Curriculum Standards paper**: Unified Gaokao questions based on the 2003 curriculum standards
-  - **New Gaokao paper**: Unified Gaokao questions based on the 2017 curriculum standards (except in 1993)
-
-</details>
 
 <details>
   <summary><b>3. Whether Liberal-Arts and Science Mathematics Papers Were Identical by Region and Year</b></summary>
@@ -195,7 +190,6 @@
 
 <ul>
 <li><a href="https://www.zxxk.com">ZXXK</a></li>
-<li><a href="https://www.jyeoo.com">Jyeoo</a></li>
 <li><a href="http://www.trgroup.com.cn">Tianren Newspaper Group</a></li>
 <li><a href="https://www.zqy.com">Zhengque Education Cloud</a></li>
 <li><a href="https://edu.sina.com.cn">Sina Education</a></li>
@@ -271,7 +265,7 @@
 
   - All files are PDFs, with all metadata and watermarks removed
   - A small number of files were converted from DOCX and may have incomplete formula rendering; this will be fixed later
-  - File naming format: (Spring)+year+paper type(+liberal arts/science)(+preliminary examination)+.pdf
+  - File naming format: (Spring)+year+paper type+(liberal arts/science)+(preliminary examination)+(applicable province).pdf
   - Bulk download instructions: Code → Download ZIP; see the image below
   ![Bulk download instructions](https://files.seeusercontent.com/2026/04/08/v3jX/1000085612.jpg)
 
@@ -294,4 +288,4 @@
 [**DxAThing/Gaokao-Math-Problems-Compilation**](https://github.com/DxAThing/Gaokao-Math-Problems-Compilation)
 </details>
 
-**Last updated: August 10, 2026. The latest version prevails; historical versions are for reference only.**
+**Last updated: August 26, 2026. The latest version prevails; historical versions are for reference only.**
